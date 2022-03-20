@@ -20,5 +20,16 @@ namespace HS.Testing.UWL.Playwright.Tests
             Assert.AreEqual(await ucommPage.GetEmailAddressAsync(), "ucomm@uwlax.edu");
             Assert.AreEqual(await ucommPage.GetLocationAsync(), "115 Graff Main Hall");
         }
+
+        [Test]
+        public async Task CheckTabs()
+        {
+            using var playwright = await Microsoft.Playwright.Playwright.CreateAsync();
+            await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions { Headless = false });
+            var page = await browser.NewPageAsync();
+            var ucommPage = new UCommDownloadsPage(page);
+            var strExpectedId = await ucommPage.ChangeTabAsync("templates");
+            Assert.AreEqual(strExpectedId, await ucommPage.GetVisibleTab("#toggle-118961"));
+        }
     }
 }
